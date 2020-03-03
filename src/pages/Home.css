@@ -1,3 +1,26 @@
 ion-content ion-toolbar {
-  --background: translucent;
+	--background: translucent;
+}
+
+.main-content {
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(#465775, transparent);
+	background-image: url("../resources/background_maze.jpg");
+	background-repeat: repeat;
+	background-size: 150px 150px;
+}
+
+.grid {
+	border: 5px solid rgb(0, 153, 255);
+	border-width: 1px 0 0 1px;
+	position: absolute;
+	z-index: 5;
+}
+
+.grid div {
+	border: 5px solid rgb(0, 153, 255);
+	border-width: 0 1px 1px 0;
+	float: left;
+	z-index: inherit;
 }
