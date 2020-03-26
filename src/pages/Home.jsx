@@ -18,14 +18,14 @@ import { makeStyles } from "@material-ui/core/styles";
 import "./Home.css";
 import InlineSVG from "svg-inline-react";
 import $ from "jquery";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Image } from "react-bootstrap";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import GridListTileBar from "@material-ui/core/GridListTileBar";
 import IconButton from "@material-ui/core/IconButton";
 import { arrowForwardCircle } from "ionicons/icons";
 
-import img from "../resources/background_maze.jpg";
+import icon from "../resources/icon_maze.png";
 
 import Canvg, { presets } from "canvg";
 
@@ -96,7 +96,7 @@ const Home = () => {
 			setMazeMap(res.maze);
 			renderSvg(750, 750, res.svg).then(png => {
 				setMazeImage(png);
-				setCurrentMazeName(`New ${mazeSize} x ${mazeSize}`)
+				setCurrentMazeName(`New ${mazeSize} x ${mazeSize}`);
 			});
 		});
 	};
@@ -106,15 +106,21 @@ const Home = () => {
 			setMazeMap(res.maze);
 			renderSvg(750, 750, res.svg).then(png => {
 				setMazeImage(png);
-				setCurrentMazeName(`New masked ${mazeSize} x ${mazeSize}`)
+				setCurrentMazeName(`New masked ${mazeSize} x ${mazeSize}`);
 			});
 		});
 	};
 
 	const solveMaze = (maze, coordinates) => {
-		if (coordinates[0] !== null && coordinates[1] !== null && coordinates[2] !== null && coordinates[3] !== null &&
+		if (
+			coordinates[0] !== null &&
+			coordinates[1] !== null &&
+			coordinates[2] !== null &&
+			coordinates[3] !== null &&
 			coordinates.filter(c => c >= 0 && c < maze.length).length === 4 &&
-			maze[coordinates[0]][coordinates[1]].mask !== 1 && maze[coordinates[2]][coordinates[3]].mask !== 1) {
+			maze[coordinates[0]][coordinates[1]].mask !== 1 &&
+			maze[coordinates[2]][coordinates[3]].mask !== 1
+		) {
 			ClojureMazeAPI.solveMaze(maze, coordinates[0], coordinates[1], coordinates[2], coordinates[3]).then(res => {
 				console.log(res.maze);
 				setMazeMap(res.maze);
@@ -222,13 +228,13 @@ const Home = () => {
 		return imgData.data.toString();
 	};
 
-	const attachDrawEvents = () => {
-		$("#myCanvas").mousedown(function (e) {
+	const attachDrawEvents = isPencil => {
+		$("#myCanvas").mousedown(function(e) {
 			mousePressed = true;
 			Draw((e.pageX - $(this).offset().left) / 8, (e.pageY - $(this).offset().top) / 8, false, isPencil);
 		});
 
-		$("#myCanvas").mousemove(function (e) {
+		$("#myCanvas").mousemove(function(e) {
 			if (mousePressed) {
 				Draw((e.pageX - $(this).offset().left) / 8, (e.pageY - $(this).offset().top) / 8, true, isPencil);
 			}
@@ -237,11 +243,11 @@ const Home = () => {
 
 	const attachEvents = () => {
 		ctx = document.getElementById("myCanvas").getContext("2d");
-		attachDrawEvents();
-		$("#myCanvas").mouseup(function (e) {
+		attachDrawEvents(isPencil);
+		$("#myCanvas").mouseup(function(e) {
 			mousePressed = false;
 		});
-		$("#myCanvas").mouseleave(function (e) {
+		$("#myCanvas").mouseleave(function(e) {
 			mousePressed = false;
 		});
 	};
@@ -252,7 +258,7 @@ const Home = () => {
 		//Scroll the mazes list horizontally with the mousewheel
 		var item = document.getElementById("mazes");
 
-		item.addEventListener("wheel", function (e) {
+		item.addEventListener("wheel", function(e) {
 			if (e.deltaY > 0) item.scrollLeft += 100;
 			else item.scrollLeft -= 100;
 		});
@@ -270,12 +276,12 @@ const Home = () => {
 		});
 	}, []);
 
-	const setCurrentMaze = (index) => {
+	const setCurrentMaze = index => {
 		setMazeMap(existingMazes[index].json);
 		setMazeImage(existingMazes[index].png);
-		setCurrentMazeName(existingMazes[index].name)
-		setMazeSize(existingMazes[index].size)
-	}
+		setCurrentMazeName(existingMazes[index].name);
+		setMazeSize(existingMazes[index].size);
+	};
 
 	useEffect(() => {
 		attachEvents();
@@ -285,22 +291,25 @@ const Home = () => {
 		<IonPage>
 			<IonHeader>
 				<IonToolbar>
-					<IonTitle>Clojure Mazes - Gergo Kekesi</IonTitle>
+					<Image slot="start" src={icon} style={{ width: "40px", height: "40px", marginLeft: "10px" }}></Image>
+					<IonTitle slot="start">Clojure Mazes - Gergo Kekesi</IonTitle>
 				</IonToolbar>
 			</IonHeader>
 			<IonContent>
 				<IonAlert
 					isOpen={showAlert}
 					onDidDismiss={() => setShowAlert(false)}
-					header={'Invalid Coordinates'}
+					header={"Invalid Coordinates"}
 					message={`The coordinates ${solveCoordinates} cannot be used. Please change them. It's either out of bounds or there is a mask at that location.`}
-					buttons={['Ok']}
+					buttons={["Ok"]}
 				/>
 				<div className="main-content">
 					<Container style={{ backgroundColor: "white", boxShadow: "0px 0px 20px black", padding: "15px" }}>
 						<Row>
 							<Col lg="12" md="12">
-								<IonTitle style={{ textAlign: "left" }} className="ion-no-padding">{"Current maze: " + currentMazeName}</IonTitle>
+								<IonTitle style={{ textAlign: "left" }} className="ion-no-padding">
+									{"Current maze: " + currentMazeName}
+								</IonTitle>
 							</Col>
 						</Row>
 						<Row>
@@ -330,6 +339,7 @@ const Home = () => {
 										<IonItem>
 											<IonLabel position="floating">Maze size</IonLabel>
 											<IonInput
+												value={mazeSize}
 												type="number"
 												onIonChange={e => {
 													if (e.detail.value === "") {
@@ -445,10 +455,10 @@ const Home = () => {
 											expand="block"
 											onClick={() => {
 												setIsPencil(isPencil ? false : true);
-												attachDrawEvents();
+												attachDrawEvents(isPencil ? false : true);
 												console.log(isPencil);
 											}}>
-											Current Tool: {isPencil ? "Eraser" : "Pencil"}
+											Current Tool: {isPencil ? "Pencil" : "Eraser"}
 										</IonButton>
 									</Col>
 								</Row>
@@ -462,38 +472,44 @@ const Home = () => {
 						<Row>
 							<Col>
 								<div className={classes.root}>
-									{existingMazes.length === 0 && <div style={{ width: "100%", height: "100%" }}>
-										<Container>
-											<Row className="justify-content-space-evenly align-items-center">
-												<Col>
-													<IonSpinner name="lines" />
-												</Col>
-											</Row>
-										</Container>
-									</div>}
+									{existingMazes.length === 0 && (
+										<div style={{ width: "100%", height: "100%" }}>
+											<Container>
+												<Row className="justify-content-space-evenly align-items-center">
+													<Col>
+														<IonSpinner name="lines" />
+													</Col>
+												</Row>
+											</Container>
+										</div>
+									)}
 									<GridList className={classes.gridList} cols={2.25} id="mazes">
-										{existingMazes.length > 0 && existingMazes.map((tile, index) => (
-											<GridListTile key={index} cols={0.5}>
-												<img src={tile.png} alt={tile.title} style={{}} />
-												<GridListTileBar
-													title={tile.name}
-													classes={{
-														root: classes.titleBar,
-														title: classes.title
-													}}
-													actionIcon={
-														<IconButton aria-label={`star ${tile.title}`} style={{ outline: "none" }} onClick={() => {
-															setCurrentMaze(index);
-														}}>
-															<IonIcon
-																icon={arrowForwardCircle}
-																style={{ width: "35px", height: "35px", filter: "invert(100%)", outline: "none" }}
-															/>
-														</IconButton>
-													}
-												/>
-											</GridListTile>
-										))}
+										{existingMazes.length > 0 &&
+											existingMazes.map((tile, index) => (
+												<GridListTile key={index} cols={0.5}>
+													<img src={tile.png} alt={tile.title} style={{}} />
+													<GridListTileBar
+														title={tile.name}
+														classes={{
+															root: classes.titleBar,
+															title: classes.title
+														}}
+														actionIcon={
+															<IconButton
+																aria-label={`star ${tile.title}`}
+																style={{ outline: "none" }}
+																onClick={() => {
+																	setCurrentMaze(index);
+																}}>
+																<IonIcon
+																	icon={arrowForwardCircle}
+																	style={{ width: "35px", height: "35px", filter: "invert(100%)", outline: "none" }}
+																/>
+															</IconButton>
+														}
+													/>
+												</GridListTile>
+											))}
 									</GridList>
 								</div>
 							</Col>
