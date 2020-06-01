@@ -1,4 +1,4 @@
-# Clojure Maze Client
+# Clojure Maze Client for the [ClojureMazesBackendServer](https://github.com/bluiska/ClojureMazesBackendServer)
 
 The application is built using Ionic React which is a web UI framework for React. It is built using the Ionic CLI tools and npm as a package manager. In order to run the development environment the Ionic CLI has to be installed. Then, run
 ```
