@@ -9,7 +9,3 @@ in the root project directory to install the required npm modules. When that is 
 ionic serve
 ```
 to start the development server. The server will be started on http://localhost:8100.
-
-# Run the pre-built application
-> For convenience, I have already produced a built version of the app under the /build folder.
-To run this please see [build/README.md](./build/README.md)
