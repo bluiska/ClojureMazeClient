@@ -9,3 +9,5 @@ in the root project directory to install the required npm modules. When that is 
 ionic serve
 ```
 to start the development server. The server will be started on http://localhost:8100.
+
+##Note: that this application was a quick prototype and used Ionic for the already packaged libraries that came with it, having used Ionic for another project already. This application was developed very quickly and proper coding standards have not been followed.
