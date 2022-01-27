@@ -28,7 +28,7 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
     "svg-inline-react": "^3.2.0",
-    "three": "^0.113.2",
+    "three": "^0.137.0",
     "typescript": "3.7.4"
   },
   "scripts": {
